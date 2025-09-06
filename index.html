@@ -112,20 +112,8 @@ footer {
     size: A4 portrait; 
     margin:23mm 10mm 15mm 10mm; 
   }
-  body, .tab-content, div { 
-    background:transparent !important; 
-    -webkit-print-color-adjust: exact !important; 
-    print-color-adjust: exact !important; 
-  }
   button, input[type="file"], .counter, .preview { 
     display:none !important; 
-  }
-  label, input[type="text"] { 
-    font-size:12px !important; 
-    background:transparent !important; 
-    text-align:center; 
-    color:black !important; 
-    font-family: 'HelveticaNeueW23', Arial, sans-serif; 
   }
 }
 </style>
@@ -238,8 +226,8 @@ function updatePreview(tabId){
     
     const img = document.createElement('img');
     img.src = src;
-    img.style.width='150px';
-    img.style.height='130px';
+    img.style.width='50mm'; // عرض الصورة على الورق
+    img.style.height='45mm'; // ارتفاع الصورة على الورق
     img.style.objectFit='cover';
     imgWrapper.appendChild(img);
     
@@ -279,8 +267,8 @@ function printPDF(btn){
     tabImages.forEach(src=>{
       const img = document.createElement('img');
       img.src = src;
-      img.style.width='150px';
-      img.style.height='120px';
+      img.style.width='50mm'; 
+      img.style.height='45mm';
       img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
     });
@@ -289,11 +277,12 @@ function printPDF(btn){
     else content.appendChild(imagesWrapper);
   }
 
-  // إنشاء wrapper يمثل صفحة A4 كاملة
+  // إنشاء wrapper يمثل صفحة A4 كاملة مع الخلفية
   const wrapper = document.createElement('div');
-  wrapper.style.width = '210mm';   // عرض صفحة A4
-  wrapper.style.minHeight = '296.5mm'; // ارتفاع صفحة A4
+  wrapper.style.width = '210mm';
+  wrapper.style.height = '297mm';
   wrapper.style.backgroundImage = "url('images/background.png')";
+  wrapper.style.backgroundSize = '100% 100%';
   wrapper.style.backgroundPosition = 'center';
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.paddingTop = '23mm';
@@ -306,7 +295,7 @@ function printPDF(btn){
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:8, backgroundColor: null }
+      html2canvas: { scale: 8, backgroundColor: null } // أعلى دقة ممكنة
     })
     .from(wrapper)
     .save();
