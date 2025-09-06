@@ -269,13 +269,18 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
-  // إزالة العناصر غير المرغوب فيها من الطباعة
+  // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.del-btn,.counter').forEach(el=>el.remove());
 
-  // أخذ قيم أسماء المعلمات من النسخة الأصلية
-  const domainTeacher = tabContent.querySelector('input:nth-of-type(10)')?.value || '';
-  const activityLeader = tabContent.querySelector('input[placeholder="وضحى النفيعي"]')?.value || 'وضحى النفيعي';
-  const schoolPrincipal = tabContent.querySelector('input[placeholder="نوير العنزي"]')?.value || 'نوير العنزي';
+  // أخذ قيم أسماء المعلمات (إذا فارغ استخدم placeholder)
+  const domainTeacherInput = tabContent.querySelector('input:nth-of-type(10)');
+  const domainTeacher = domainTeacherInput.value.trim() || domainTeacherInput.placeholder || '';
+
+  const activityLeaderInput = tabContent.querySelector('input[placeholder="وضحى النفيعي"]');
+  const activityLeader = activityLeaderInput.value.trim() || activityLeaderInput.placeholder || 'وضحى النفيعي';
+
+  const schoolPrincipalInput = tabContent.querySelector('input[placeholder="نوير العنزي"]');
+  const schoolPrincipal = schoolPrincipalInput.value.trim() || schoolPrincipalInput.placeholder || 'نوير العنزي';
 
   // إضافة الصور في صف واحد
   const tabImages = uploadedImages[tabId] || [];
@@ -300,14 +305,14 @@ function printPDF(btn){
     if(lastRow) lastRow.before(imagesWrapper);
     else content.appendChild(imagesWrapper);
 
-    // أسماء المعلمات تحت الصور مرة واحدة
+    // إضافة أسماء المعلمات مرة واحدة تحت الصور
     const infoRow = document.createElement('div');
     infoRow.className = 'print-info';
     infoRow.innerHTML = `معلمة المجال: ${domainTeacher} &nbsp;&nbsp; رائدة النشاط: ${activityLeader} &nbsp;&nbsp; مديرة المدرسة: ${schoolPrincipal}`;
     imagesWrapper.after(infoRow);
   }
 
-  // إنشاء wrapper يمثل صفحة A4 كاملة مع الخلفية
+  // إعداد صفحة A4
   const wrapper = document.createElement('div');
   wrapper.style.width = '210mm';
   wrapper.style.height = '296mm';
