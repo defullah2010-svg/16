@@ -271,16 +271,31 @@ function printPDF(btn){
   // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إضافة الخلفية
-  content.style.backgroundImage = "url('images/background.png')";
-  content.style.backgroundSize = "cover";
-  content.style.backgroundPosition = "center";
-  content.style.backgroundRepeat = "no-repeat";
+  // إنشاء عنصر wrapper لتطبيق الهامش على المحتوى فقط
+  const wrapper = document.createElement('div');
+  wrapper.style.marginTop = '23mm';
+  wrapper.style.marginBottom = '15mm';
+  wrapper.style.marginLeft = '10mm';
+  wrapper.style.marginRight = '10mm';
+  wrapper.appendChild(content);
 
+  // إضافة الخلفية على body كامل في PDF
+  const backgroundWrapper = document.createElement('div');
+  backgroundWrapper.style.position = 'absolute';
+  backgroundWrapper.style.top = '0';
+  backgroundWrapper.style.left = '0';
+  backgroundWrapper.style.width = '210mm';   // عرض A4
+  backgroundWrapper.style.height = '297mm';  // ارتفاع A4
+  backgroundWrapper.style.backgroundImage = "url('images/background.png')";
+  backgroundWrapper.style.backgroundSize = 'cover';
+  backgroundWrapper.style.backgroundPosition = 'center';
+  backgroundWrapper.style.backgroundRepeat = 'no-repeat';
+  backgroundWrapper.appendChild(wrapper);
+
+  // إضافة الصور إذا كانت موجودة
   const tabImages = uploadedImages[tabId] || [];
-  let imagesWrapper;
   if(tabImages.length > 0){
-    imagesWrapper = document.createElement('div');
+    const imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
@@ -295,24 +310,26 @@ function printPDF(btn){
       img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
     });
-    content.appendChild(imagesWrapper);
-  }
 
-  // نقل معلمة المجال، رائدة النشاط، مديرة المدرسة أسفل الصور
-  const lastRow = content.querySelectorAll('.grid-3');
-  if(lastRow.length > 0){
-    const staffRow = lastRow[lastRow.length - 1]; // الصف الأصلي
-    staffRow.style.marginTop = '10px';
-    if(imagesWrapper) imagesWrapper.after(staffRow); // ضع أسفل الصور
+    // ضع الصور قبل صف المعلمات
+    const lastRow = content.querySelectorAll('.grid-3');
+    if(lastRow.length > 0){
+      const staffRow = lastRow[lastRow.length - 1]; 
+      staffRow.style.marginTop = '10px';
+      imagesWrapper.after(staffRow);
+      wrapper.insertBefore(imagesWrapper, staffRow);
+    } else {
+      wrapper.appendChild(imagesWrapper);
+    }
   }
 
   html2pdf()
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:2, backgroundColor: null } 
+      html2canvas: { scale:2, backgroundColor: null, logging:true, width: 210*3.78, height: 297*3.78 } // full A4 size in px
     })
-    .from(content)
+    .from(backgroundWrapper)
     .save();
 }
 </script>
