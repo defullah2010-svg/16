@@ -264,31 +264,20 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
-  // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // wrapper مع الهوامش
+  // إضافة wrapper مع الخلفية والهامش
   const wrapper = document.createElement('div');
-  wrapper.style.marginTop = '23mm';
-  wrapper.style.marginBottom = '15mm';
-  wrapper.style.marginLeft = '10mm';
-  wrapper.style.marginRight = '10mm';
-  wrapper.appendChild(content);
+  wrapper.style.backgroundImage = "url('images/background.png')";
+  wrapper.style.backgroundSize = "cover";
+  wrapper.style.backgroundPosition = "center";
+  wrapper.style.backgroundRepeat = "no-repeat";
+  wrapper.style.paddingTop = "23mm";
+  wrapper.style.paddingBottom = "15mm";
+  wrapper.style.paddingLeft = "10mm";
+  wrapper.style.paddingRight = "10mm";
 
-  // background يغطي كامل A4
-  const backgroundWrapper = document.createElement('div');
-  backgroundWrapper.style.position = 'absolute';
-  backgroundWrapper.style.top = '0';
-  backgroundWrapper.style.left = '0';
-  backgroundWrapper.style.width = '210mm';
-  backgroundWrapper.style.height = '297mm';
-  backgroundWrapper.style.backgroundImage = "url('images/background.png')";
-  backgroundWrapper.style.backgroundSize = 'cover';
-  backgroundWrapper.style.backgroundPosition = 'center';
-  backgroundWrapper.style.backgroundRepeat = 'no-repeat';
-  backgroundWrapper.appendChild(wrapper);
-
-  // إضافة الصور إذا كانت موجودة
+  // إضافة الصور قبل الصف الأخير (المعلمات)
   const tabImages = uploadedImages[tabId] || [];
   if(tabImages.length > 0){
     const imagesWrapper = document.createElement('div');
@@ -297,8 +286,7 @@ function printPDF(btn){
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
     imagesWrapper.style.margin = '10px 0';
-
-    tabImages.forEach(src => {
+    tabImages.forEach(src=>{
       const img = document.createElement('img');
       img.src = src;
       img.style.width='150px';
@@ -306,10 +294,12 @@ function printPDF(btn){
       img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
     });
-
-    // ضع الصور بعد الهامش مباشرة داخل wrapper
-    wrapper.insertBefore(imagesWrapper, wrapper.firstChild.nextSibling); 
+    const lastRow = content.querySelector('.grid-3:last-of-type');
+    if(lastRow) lastRow.before(imagesWrapper);
+    else content.appendChild(imagesWrapper);
   }
+
+  wrapper.appendChild(content);
 
   html2pdf()
     .set({
@@ -317,7 +307,7 @@ function printPDF(btn){
       pagebreak: { mode: ['avoid-all'] },
       html2canvas: { scale:2, backgroundColor: null }
     })
-    .from(backgroundWrapper)
+    .from(wrapper)
     .save();
 }
 </script>
