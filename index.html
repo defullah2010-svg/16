@@ -111,7 +111,7 @@ footer {
   @page { 
     size: A4 portrait; 
     margin-top: 23mm;   /* الهامش العلوي */
-    margin-bottom: 15mm; /* الهامش السفلي */
+    margin-bottom: 0mm; /* الهامش السفلي */
     margin-left: 10mm;   /* الهامش الأيسر */
     margin-right: 10mm;  /* الهامش الأيمن */
   }
@@ -268,17 +268,19 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
+  // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إضافة الخلفية هنا
+  // إضافة الخلفية
   content.style.backgroundImage = "url('images/background.png')";
   content.style.backgroundSize = "cover";
   content.style.backgroundPosition = "center";
   content.style.backgroundRepeat = "no-repeat";
 
   const tabImages = uploadedImages[tabId] || [];
+  let imagesWrapper;
   if(tabImages.length > 0){
-    const imagesWrapper = document.createElement('div');
+    imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
@@ -296,11 +298,19 @@ function printPDF(btn){
     content.appendChild(imagesWrapper);
   }
 
+  // نقل معلمة المجال، رائدة النشاط، مديرة المدرسة أسفل الصور
+  const lastRow = content.querySelectorAll('.grid-3');
+  if(lastRow.length > 0){
+    const staffRow = lastRow[lastRow.length - 1]; // الصف الأصلي
+    staffRow.style.marginTop = '10px';
+    if(imagesWrapper) imagesWrapper.after(staffRow); // ضع أسفل الصور
+  }
+
   html2pdf()
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:2, backgroundColor: null } // backgroundColor null لتظهر الصورة
+      html2canvas: { scale:2, backgroundColor: null } 
     })
     .from(content)
     .save();
