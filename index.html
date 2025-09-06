@@ -14,56 +14,117 @@
 @font-face {
   font-family: 'HelveticaNeueW23';
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
-body, input, label, button, header, footer {
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
-  margin:0;
-  padding:0;
   background:#f9f9f9;
   width:100%;
+  line-height:1.4;
 }
-header { background:#15445a; color:white; text-align:center; padding:12px; }
-header h1 { margin:0; font-size:18px; }
-.tab-content { padding:15px; width:100%; box-sizing:border-box; }
-label { display:block; margin:5px 0 2px; font-weight:bold; font-size:12px; text-align:center; }
-input { width:100%; padding:4px; border:1px solid #c2c1c1; border-radius:4px; margin-bottom:5px; box-sizing:border-box; font-size:12px; text-align:center; background:transparent; }
-button { background:#b36b3f; color:white; border:none; padding:8px 10px; margin:5px 0; cursor:pointer; border-radius:6px; width:100%; font-size:14px; font-weight:bold; }
-footer { text-align:center; padding:10px; color:#333; font-weight:bold; font-size:12px; background:#f1f1f1; }
+header {
+  background:#15445a;
+  color:white;
+  text-align:center;
+  padding:1rem;
+}
+header h1 { font-size:1.2rem; }
 
+.tab-content {
+  padding:1rem;
+  width:100%;
+}
+
+label {
+  display:block;
+  margin:0.3rem 0 0.2rem;
+  font-weight:bold;
+  font-size:0.9rem;
+  text-align:center;
+}
+
+input {
+  width:100%;
+  padding:0.5rem;
+  border:1px solid #c2c1c1;
+  border-radius:6px;
+  margin-bottom:0.5rem;
+  font-size:0.9rem;
+  text-align:center;
+  background:transparent;
+}
+
+button {
+  background:#b36b3f;
+  color:white;
+  border:none;
+  padding:0.6rem;
+  margin:0.5rem 0;
+  cursor:pointer;
+  border-radius:6px;
+  width:100%;
+  font-size:1rem;
+  font-weight:bold;
+}
+
+footer {
+  text-align:center;
+  padding:0.5rem;
+  color:#333;
+  font-weight:bold;
+  font-size:0.8rem;
+  background:#f1f1f1;
+}
+
+/* Grid ديناميكي لكل الشاشات */
+.grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.5rem; }
+.grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:0.5rem; }
+.grid-1 { display:grid; grid-template-columns:1fr; gap:0.5rem; }
+
+/* الصور المرفوعة */
+.preview { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-top:0.5rem; }
+
+/* زر حذف الصور */
+.del-btn {
+  position:absolute;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
+  width:24px;
+  height:24px;
+  background:#d50000;
+  color:#fff;
+  border:2px solid #fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 0 4px rgba(0,0,0,0.3);
+}
+
+/* الطباعة */
 @media print {
-  @page { size: A4 portrait; margin: 0; }
-  body, .tab-content, div { background: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .tab-content { display:block !important; }
-  button, .tab-button, .tabs, footer, .preview, input[type="file"], .counter { display:none !important; }
-  label { 
-    font-size: 14px !important; 
-    font-weight: bold; 
-    background: transparent !important;  
-    color: black !important;
-  }
-  input[type="text"] { 
-    font-size: 14px !important; 
-    text-align: center; 
-    border-color: #aaa; 
-    background: transparent !important; 
-    color: black; 
-  }
+  @page { size:A4 portrait; margin:0; }
+  body, .tab-content, div { background:transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  button,input[type="file"],.counter,.preview { display:none !important; }
+  label,input[type="text"] { font-size:0.9rem !important; background:transparent !important; text-align:center; color:black !important; }
 }
 </style>
 </head>
 <body>
 
 <header>
-<h1>برامج النشاط الطلابي</h1>
+  <h1>برامج النشاط الطلابي</h1>
 </header>
 
 <div id="culture" class="tab-content active">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">استمارة توثيق برنامج</label>
+  <label style="font-size:1rem; font-weight:bold;">استمارة توثيق برنامج</label>
 
-  <!-- إدارة التعليم واسم المدرسة في صف واحد -->
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:10px;">
+  <!-- إدارة التعليم واسم المدرسة -->
+  <div class="grid-2">
     <div>
       <label>إدارة التعليم</label>
       <input type="text" placeholder="الخرج">
@@ -74,66 +135,51 @@ footer { text-align:center; padding:10px; color:#333; font-weight:bold; font-siz
     </div>
   </div>
 
-  <!-- اسم التقرير والمجال -->
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:10px;">
+  <div class="grid-2">
     <div><label>اسم التقرير</label><input type="text"></div>
     <div><label>المجال</label><input type="text"></div>
   </div>
 
-  <!-- أهداف البرنامج -->
   <label>أهداف البرنامج</label>
-  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:10px;">
+  <div class="grid-3">
     <input type="text"><input type="text"><input type="text">
     <input type="text"><input type="text"><input type="text">
   </div>
 
-  <!-- مدة التنفيذ ومكان التنفيذ وتاريخ التنفيذ -->
-  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px;">
+  <div class="grid-3">
     <div><label>مدة التنفيذ</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>تاريخ التنفيذ</label><input type="text" class="date"></div>
   </div>
 
-  <!-- الوصف (صفين، خانة واحدة لكل صف) -->
   <label>الوصف</label>
-  <div style="display:grid; grid-template-columns:1fr; gap:5px; margin-bottom:10px;">
+  <div class="grid-1">
     <input type="text">
     <input type="text">
   </div>
 
-  <!-- الفئة المستهدفة وعدد المستفيدين -->
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:10px;">
+  <div class="grid-2">
     <div><label>الفئة المستهدفة</label><input type="text"></div>
     <div><label>عدد المستفيدين</label><input type="text"></div>
   </div>
 
-  <!-- القيمة (صفين، خانة واحدة لكل صف) -->
   <label>القيمة</label>
-  <div style="display:grid; grid-template-columns:1fr; gap:5px; margin-bottom:10px;">
+  <div class="grid-1">
     <input type="text">
-    <input type="text">
+   
   </div>
 
-  <!-- مؤشر الإنجاز -->
   <label>مؤشر الإنجاز</label>
-  <div style="display:grid; grid-template-columns:1fr; gap:5px; margin-bottom:10px;">
-    <input type="text">
-  </div>
+  <div class="grid-1"><input type="text"></div>
 
-  <!-- التحديات والصعوبات -->
   <label>التحديات والصعوبات</label>
-  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:10px;">
-    <input type="text"><input type="text"><input type="text">
-      </div>
+  <div class="grid-3"><input type="text"><input type="text"><input type="text"></div>
 
-  <!-- الشواهد -->
- 
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
-  <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
-  <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
+  <div class="counter"></div>
+  <div class="preview"></div>
 
-  <!-- رائدة النشاط ومديرة المدرسة -->
-  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px;">
+  <div class="grid-3" style="margin-top:0.5rem;">
     <div><label>معلمة المجال</label><input type="text"></div>
     <div><label>رائدة النشاط</label><input type="text" placeholder="وضحى النفيعي"></div>
     <div><label>مديرة المدرسة</label><input type="text" placeholder="نوير العنزي"></div>
@@ -177,30 +223,14 @@ function updatePreview(tabId){
     
     const img = document.createElement('img');
     img.src = src;
-    img.style.width='80px';
-    img.style.height='80px';
+    img.style.width='150px';
+    img.style.height='150px';
     img.style.objectFit='cover';
     imgWrapper.appendChild(img);
     
     const delBtn = document.createElement('div');
     delBtn.textContent = '×';
-    delBtn.style.position = 'absolute';
-    delBtn.style.top = '5px';
-    delBtn.style.left = '50%';
-    delBtn.style.transform = 'translateX(-50%)';
-    delBtn.style.width = '24px';
-    delBtn.style.height = '24px';
-    delBtn.style.background = '#d50000';
-    delBtn.style.color = 'white';
-    delBtn.style.border = '2px solid white';
-    delBtn.style.borderRadius = '50%';
-    delBtn.style.boxShadow = '0 0 4px rgba(0,0,0,0.3)';
-    delBtn.style.cursor = 'pointer';
-    delBtn.style.display = 'flex';
-    delBtn.style.alignItems = 'center';
-    delBtn.style.justifyContent = 'center';
-    delBtn.style.fontSize = '16px';
-    delBtn.style.fontWeight = 'bold';
+    delBtn.className = 'del-btn';
     delBtn.title = 'حذف الصورة';
     delBtn.addEventListener('click',()=>{ uploadedImages[tabId].splice(index,1); updatePreview(tabId); });
     imgWrapper.appendChild(delBtn);
@@ -219,10 +249,8 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
-  // إزالة عناصر غير مطلوبة للطباعة
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إضافة الصور المرفوعة فقط
   const tabImages = uploadedImages[tabId] || [];
   if(tabImages.length > 0){
     const imagesWrapper = document.createElement('div');
@@ -247,7 +275,6 @@ function printPDF(btn){
     else content.appendChild(imagesWrapper);
   }
 
-  // إضافة wrapper مع خلفية الصورة
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
@@ -259,10 +286,6 @@ function printPDF(btn){
   wrapper.style.backgroundPosition = "center";
   wrapper.style.backgroundRepeat = "no-repeat";
   wrapper.appendChild(content);
-
-  // ضغط المحتوى لتناسب صفحة واحدة
-  wrapper.style.transform = "scale(1)";
-  wrapper.style.transformOrigin = "top left";
 
   html2pdf().set({
     margin:0,
