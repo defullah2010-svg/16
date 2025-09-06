@@ -110,7 +110,7 @@ footer {
 @media print {
   @page { 
     size: A4 portrait; 
-    margin:23mm 10mm 15mm 10mm; /* أعلى، يمين، أسفل، يسار */
+    margin:23mm 10mm 15mm 10mm; 
   }
   body, .tab-content, div { 
     background:transparent !important; 
@@ -268,21 +268,22 @@ function printPDF(btn){
 
   // إضافة wrapper مع الخلفية والهامش
   const wrapper = document.createElement('div');
-      wrapper.style.width = "210mm";    // عرض صفحة A4
-      wrapper.style.height = "297mm";   // ارتفاع صفحة A4
-     wrapper.style.backgroundImage = "url('images/background.png')";
-     wrapper.style.backgroundSize = "cover";   // تغطي كامل الصفحة
-     wrapper.style.backgroundPosition = "center";
-     wrapper.style.backgroundRepeat = "no-repeat";
-     wrapper.style.paddingTop = "23mm";
-     wrapper.style.paddingBottom = "15mm";
-     wrapper.style.paddingLeft = "10mm";
-      wrapper.style.paddingRight = "10mm";
+  wrapper.style.width = "100%";
+  wrapper.style.minHeight = "297mm"; // ارتفاع صفحة A4
+  wrapper.style.backgroundImage = "url('images/background.png')";
+  wrapper.style.backgroundSize = "cover";
+  wrapper.style.backgroundPosition = "center";
+  wrapper.style.backgroundRepeat = "no-repeat";
+  wrapper.style.paddingTop = "23mm";
+  wrapper.style.paddingBottom = "15mm";
+  wrapper.style.paddingLeft = "10mm";
+  wrapper.style.paddingRight = "10mm";
 
   // إضافة الصور قبل الصف الأخير (المعلمات)
   const tabImages = uploadedImages[tabId] || [];
+  let imagesWrapper;
   if(tabImages.length > 0){
-    const imagesWrapper = document.createElement('div');
+    imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
