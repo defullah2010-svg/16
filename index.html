@@ -289,17 +289,18 @@ function printPDF(btn){
     else content.appendChild(imagesWrapper);
   }
 
-  // إنشاء wrapper مع الخلفية والهامش
+  // إنشاء wrapper يمثل صفحة A4 كاملة
   const wrapper = document.createElement('div');
-  wrapper.style.width = "100%";
+  wrapper.style.width = '210mm';   // عرض صفحة A4
+  wrapper.style.minHeight = '296.5mm'; // ارتفاع صفحة A4
   wrapper.style.backgroundImage = "url('images/background.png')";
-  wrapper.style.backgroundSize = "cover";
-  wrapper.style.backgroundPosition = "center";
-  wrapper.style.backgroundRepeat = "no-repeat";
-  wrapper.style.paddingTop = "23mm";
-  wrapper.style.paddingBottom = "15mm";
-  wrapper.style.paddingLeft = "10mm";
-  wrapper.style.paddingRight = "10mm";
+  wrapper.style.backgroundSize = '100% 100%'; // لتملأ كامل الصفحة
+  wrapper.style.backgroundPosition = 'center';
+  wrapper.style.backgroundRepeat = 'no-repeat';
+  wrapper.style.paddingTop = '23mm';
+  wrapper.style.paddingBottom = '15mm';
+  wrapper.style.paddingLeft = '10mm';
+  wrapper.style.paddingRight = '10mm';
   wrapper.appendChild(content);
 
   html2pdf()
