@@ -262,8 +262,13 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
-  // إزالة العناصر غير المرغوب فيها
+  // إزالة العناصر غير المرغوب فيها من الطباعة
   content.querySelectorAll('button,input[type="file"],.counter').forEach(el=>el.remove());
+
+  // أخذ قيم أسماء المعلمات من النسخة الأصلية
+  const domainTeacher = tabContent.querySelector('input:nth-of-type(10)')?.value || '';
+  const activityLeader = tabContent.querySelector('input[placeholder="وضحى النفيعي"]')?.value || 'وضحى النفيعي';
+  const schoolPrincipal = tabContent.querySelector('input[placeholder="نوير العنزي"]')?.value || 'نوير العنزي';
 
   // إضافة الصور قبل الصف الأخير
   const tabImages = uploadedImages[tabId] || [];
@@ -272,16 +277,31 @@ function printPDF(btn){
     imagesWrapper.style.display = 'flex';
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
-    imagesWrapper.style.gap = '5px';
+    imagesWrapper.style.gap = '10px';
     imagesWrapper.style.margin = '10px 0';
+
     tabImages.forEach(src=>{
+      const imgContainer = document.createElement('div');
+      imgContainer.style.textAlign = 'center';
+      
       const img = document.createElement('img');
       img.src = src;
-      img.style.width='50mm';  // كبير للطباعة
-      img.style.height='45mm';
+      img.style.width='150px';
+      img.style.height='130px';
       img.style.objectFit='cover';
-      imagesWrapper.appendChild(img);
+      imgContainer.appendChild(img);
+
+      // إضافة أسماء المعلمات تحت الصورة
+      const infoRow = document.createElement('div');
+      infoRow.style.marginTop = '5px';
+      infoRow.style.fontWeight = 'bold';
+      infoRow.style.textAlign = 'center';
+      infoRow.innerHTML = `معلمة المجال: ${domainTeacher}<br>رائدة النشاط: ${activityLeader}<br>مديرة المدرسة: ${schoolPrincipal}`;
+
+      imgContainer.appendChild(infoRow);
+      imagesWrapper.appendChild(imgContainer);
     });
+
     const lastRow = content.querySelector('.grid-3:last-of-type');
     if(lastRow) lastRow.before(imagesWrapper);
     else content.appendChild(imagesWrapper);
