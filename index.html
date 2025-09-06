@@ -1,344 +1,189 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>برامج النشاط الطلابي - استمارة توثيق برنامج</title>
-
-<!-- Flatpickr & html2pdf -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استمارة توثيق برنامج</title>
 
 <style>
-  @font-face {
-    font-family: 'HelveticaNeueW23';
-    src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  body {
+    font-family: "Tahoma", sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
   }
-
-  :root{
-    --brand:#15445a;
-    --accent:#b36b3f;
-    --bg:#f7f7f7;
-    --muted:#eaeaea;
-    --border:#cfcfcf;
-    --text:#222;
+  .container {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
-
-  *{box-sizing:border-box}
-  body, input, textarea, button, label, header{font-family:'HelveticaNeueW23', Arial, sans-serif}
-  body{margin:0; background:var(--bg); color:var(--text)}
-
-  header{background:var(--brand); color:#fff; text-align:center; padding:14px}
-  header h1{margin:0; font-size:20px}
-
-  .container{max-width:980px; margin:16px auto; background:#fff; border:1px solid var(--muted); border-radius:14px; padding:16px; box-shadow:0 6px 18px rgba(0,0,0,.05)}
-
-  .subtitle{font-weight:bold; text-align:center; font-size:16px; margin:4px 0 16px; color:#333}
-
-  label{display:block; font-weight:bold; margin:6px 0 4px; text-align:center}
-  input[type="text"], input[type="number"], .input, textarea{width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:transparent; text-align:center; font-size:14px}
-  textarea{min-height:110px; resize:vertical; direction:rtl}
-
-  .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px}
-  .row-3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px}
-  .goals-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px}
-
-  .section{border:1px dashed var(--muted); border-radius:12px; padding:12px; margin-bottom:14px}
-
-  .actions{display:flex; flex-wrap:wrap; margin-top:6px}
-  .btn{background:var(--accent); color:#fff; border:none; padding:14px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%; font-size:16px}
-
-  .evidence{border:1px solid var(--muted); border-radius:12px; padding:12px}
-  .evidence .preview{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-  .thumb{position:relative; width:120px; height:120px; border:1px solid var(--border); border-radius:10px; overflow:hidden}
-  .thumb img{width:100%; height:100%; object-fit:cover}
-  .del{position:absolute; top:0; left:50%; transform:translate(-50%, -50%); width:22px; height:22px; background:#d93333; color:#fff; border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer}
-
-  .sign-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px}
-  .sign-box{border:1px solid var(--muted); border-radius:10px; padding:10px}
-  .sign-title{font-weight:bold; margin-bottom:6px; text-align:center}
-  .sign-name{text-align:center; font-size:14px}
-
-  @media (max-width:640px){
-    .row, .row-3, .goals-grid, .sign-row{grid-template-columns:1fr}
+  h1 {
+    text-align: center;
+    background: #444;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
   }
-
-  @media print{
-    @page{size:A4 portrait; margin:50mm 10mm 20mm 10mm} /* أعلى 5سم, يمين ويسار 1سم, أسفل 2سم */
-    .actions, .u-hidden-print{display:none !important}
-    body{background:#fff}
-    .container{box-shadow:none; border:none; padding:0}
-    textarea{white-space:pre-wrap}
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  textarea { min-height: 60px; }
+  #preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .thumb {
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .del {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 22px;
+    height: 22px;
+    background: #d93333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #printBtn {
+    display: block;
+    width: 100%;
+    background: #444;
+    color: white;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  #printBtn:hover { background: #222; }
+  /* إخفاء العناصر من الطباعة */
+  .exclude { display: none !important; }
+  @media (max-width: 768px) {
+    .thumb { width: 90px; height: 90px; }
   }
 </style>
 </head>
 <body>
-  <header>
-    <h1>برامج النشاط الطلابي</h1>
-  </header>
 
-  <div class="container" id="formRoot">
-    <div class="subtitle">استمارة توثيق برنامج</div>
+<div class="container" id="formRoot">
+  <h1 class="exclude">برامج النشاط الطلابي</h1>
+  
+  <label>إدارة التعليم</label>
+  <input type="text" placeholder="الخرج">
+  
+  <label>المرحلة</label>
+  <input type="text" placeholder="المتوسطة">
 
-    <div class="section">
-      <div class="row">
-        <div>
-          <label>إدارة التعليم</label>
-          <input type="text" id="edu" value="الخرج" />
-        </div>
-        <div>
-          <label>المدرسة</label>
-          <input type="text" id="stage" value="المتوسطة السادسة عشر" />
-        </div>
-      </div>
-    </div>
+  <label>اسم التقرير</label>
+  <input type="text" id="reportName">
 
-    <div class="section">
-      <div class="row">
-        <div>
-          <label>اسم التقرير</label>
-          <input type="text" id="reportName" />
-        </div>
-        <div>
-          <label>المجال</label>
-          <input type="text" id="domain" />
-        </div>
-      </div>
-    </div>
+  <label>المجال</label>
+  <input type="text">
 
-    <!-- الأهداف -->
-    <div class="section">
-      <label>الأهداف</label>
-      <div class="goals-grid">
-        <input type="text" class="goal" placeholder="هدف 1" />
-        <input type="text" class="goal" placeholder="هدف 2" />
-        <input type="text" class="goal" placeholder="هدف 3" />
-        <input type="text" class="goal" placeholder="هدف 4" />
-        <input type="text" class="goal" placeholder="هدف 5" />
-        <input type="text" class="goal" placeholder="هدف 6" />
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="row-3">
-        <div>
-          <label>مدة التنفيذ</label>
-          <input type="text" id="duration" placeholder="" />
-        </div>
-        <div>
-          <label>مكان التنفيذ</label>
-          <input type="text" id="place" />
-        </div>
-        <div>
-          <label>تاريخ التنفيذ</label>
-          <input type="text" id="date" class="date" />
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <label>الوصف</label>
-      <textarea id="description" placeholder="اكتب وصف البرنامج بالتفصيل..."></textarea>
-    </div>
-
-    <div class="section">
-      <div class="row">
-        <div>
-          <label>الفئة المستهدفة</label>
-          <input type="text" id="audience" />
-        </div>
-        <div>
-          <label>عدد المستفيدين</label>
-          <input type="number" id="beneficiaries" min="0" />
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <label>القيمة</label>
-      <textarea id="valueText" placeholder="القيمة التي يرسخها البرنامج..."></textarea>
-    </div>
-
-    <div class="section">
-      <label>مؤشر الإنجاز</label>
-      <input type="text" id="kpi" />
-    </div>
-
-    <div class="section">
-      <label>التحديات والصعوبات</label>
-      <textarea id="challenges" placeholder="اذكر أبرز التحديات والصعوبات..."></textarea>
-    </div>
-
-    <div class="section evidence">
-      <label>الشواهد</label>
-      <input class="u-hidden-print" type="file" id="evidenceInput" accept="image/*" multiple />
-      <div style="font-size:12px; color:#5b3a29; font-weight:bold; margin-top:6px" id="counter"></div>
-      <div class="preview" id="preview"></div>
-      <div class="actions u-hidden-print">
-        <button class="btn light" id="clearAll">حذف كل الشواهد</button>
-      </div>
-    </div>
-
-    <div class="sign-row">
-      <div class="sign-box">
-        <div class="sign-title">رائدة النشاط</div>
-        <div class="sign-name">وضحى النفيعي</div>
-      </div>
-      <div class="sign-box">
-        <div class="sign-title">مديرة المدرسة</div>
-        <div class="sign-name">نوير العنزي</div>
-      </div>
-    </div>
-
-    <div class="actions u-hidden-print" style="margin-top:14px">
-      <button class="btn" id="printBtn">طباعة PDF</button>
-    </div>
+  <label>الأهداف</label>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px;">
+    <input type="text"><input type="text"><input type="text">
+    <input type="text"><input type="text"><input type="text">
   </div>
 
-<script>
-  const dateInput = document.getElementById('date');
-  const today = new Date();
-  const pad = n => (n<10 ? '0'+n : ''+n);
-  dateInput.value = `${pad(today.getDate())}-${pad(today.getMonth()+1)}-${today.getFullYear()}`;
-  setTimeout(()=>{ flatpickr(".date", {locale:'ar', dateFormat:"d-m-Y", defaultDate: dateInput.value}); }, 0);
+  <label>مدة التنفيذ</label>
+  <input type="text">
 
+  <label>مكان التنفيذ</label>
+  <input type="text">
+
+  <label>إرفاق الشواهد (بحد أقصى 4 صور)</label>
+  <input type="file" id="evidenceInput" multiple accept="image/*">
+  <div id="preview"></div>
+
+  <button id="printBtn">📄 طباعة الاستمارة إلى PDF</button>
+</div>
+
+<!-- مكتبات -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
   const input = document.getElementById('evidenceInput');
   const preview = document.getElementById('preview');
-  const counter = document.getElementById('counter');
-  const clearAllBtn = document.getElementById('clearAll');
-  const MAX = 4;
   let images = [];
-
-  function updateCounter(){ counter.textContent = images.length ? `عدد الشواهد: ${images.length}` : '' }
+  const MAX = 4;
 
   function renderThumbs(){
-    preview.innerHTML = '';
+    preview.innerHTML='';
     images.forEach((src, idx)=>{
-      const wrap = document.createElement('div');
-      wrap.className = 'thumb';
-      const img = document.createElement('img');
-      img.src = src;
-      const del = document.createElement('button');
-      del.className = 'del';
-      del.textContent = '×';
-      del.title = 'حذف الصورة';
-      del.onclick = ()=>{ images.splice(idx,1); renderThumbs(); updateCounter(); };
+      const wrap=document.createElement('div');
+      wrap.className='thumb';
+      const img=document.createElement('img');
+      img.src=src;
+      const del=document.createElement('button');
+      del.className='del';
+      del.textContent='×';
+      del.title='حذف الصورة';
+      del.onclick=()=>{ images.splice(idx,1); renderThumbs(); };
       wrap.appendChild(img);
       wrap.appendChild(del);
       preview.appendChild(wrap);
     });
   }
 
-  input.addEventListener('change', (e)=>{
-    const files = Array.from(e.target.files || []);
-    if(images.length + files.length > MAX){
-      alert(`مسموح برفع ${MAX} صور كحد أقصى.`);
-      return e.target.value = '';
-    }
-    let pending = files.length;
+  input.addEventListener('change',(e)=>{
+    const files=Array.from(e.target.files);
+    if(images.length+files.length>MAX){ alert(`مسموح فقط ${MAX} صور`); return; }
     files.forEach(file=>{
-      const reader = new FileReader();
-      reader.onload = ev => {
-        images.push(ev.target.result);
-        pending--;
-        if(pending===0){ renderThumbs(); updateCounter(); }
-      };
+      const reader=new FileReader();
+      reader.onload=ev=>{ images.push(ev.target.result); renderThumbs(); };
       reader.readAsDataURL(file);
     });
     e.target.value='';
   });
 
-  clearAllBtn.addEventListener('click', ()=>{
-    if(!images.length) return;
-    if(confirm('هل تريد حذف كل الشواهد؟')){ images = []; renderThumbs(); updateCounter(); }
-  });
+  document.getElementById('printBtn').addEventListener('click', ()=>{
+    // استنساخ النموذج
+    const element=document.getElementById('formRoot').cloneNode(true);
 
-  function preparePrintableClone(){
-    const root = document.getElementById('formRoot');
-    const clone = root.cloneNode(true);
-    clone.querySelectorAll('.u-hidden-print, input[type="file"]').forEach(el=>el.remove());
-    clone.querySelectorAll('textarea').forEach(t => {
-      const div = document.createElement('div');
-      div.style.minHeight = '60px';
-      div.style.border = '1px solid #ddd';
-      div.style.borderRadius = '8px';
-      div.style.padding = '8px 10px';
-      div.style.whiteSpace = 'pre-wrap';
-      div.style.direction = 'rtl';
-      div.textContent = t.value;
-      t.replaceWith(div);
-    });
-    clone.querySelectorAll('input[type="text"], input[type="number"]').forEach(inp => {
-      const span = document.createElement('div');
-      span.style.border = '1px solid #ddd';
-      span.style.borderRadius = '8px';
-      span.style.padding = '8px 10px';
-      span.style.textAlign = 'center';
-      span.textContent = inp.value;
-      inp.replaceWith(span);
-    });
-    const previewClone = clone.querySelector('#preview');
-    if(previewClone){
-      previewClone.innerHTML = '';
-      images.forEach(src=>{
-        const wrap = document.createElement('div');
-        wrap.style.display='inline-block';
-        wrap.style.width='140px';
-        wrap.style.height='140px';
-        wrap.style.margin='4px';
-        wrap.style.border='1px solid #ddd';
-        wrap.style.borderRadius='10px';
-        wrap.style.overflow='hidden';
-        const img = document.createElement('img');
-        img.src = src;
-        img.style.width='100%';
-        img.style.height='100%';
-        img.style.objectFit='cover';
-        wrap.appendChild(img);
-        previewClone.appendChild(wrap);
-      });
-    }
-    return clone;
-  }
+    // إزالة الهيدر وزر الطباعة من النسخة
+    element.querySelectorAll('h1, #printBtn').forEach(el => el.remove());
 
-  document.getElementById('printBtn').addEventListener('click', async ()=>{
-    const printable = preparePrintableClone();
-    const reportTitle = document.getElementById('reportName').value?.trim();
-    if(reportTitle){
-      const title = document.createElement('div');
-      title.textContent = reportTitle;
-      title.style.fontWeight = 'bold';
-      title.style.fontSize = '22px';
-      title.style.textAlign = 'center';
-      title.style.marginBottom = '10px';
-      printable.insertBefore(title, printable.firstChild);
-    }
-
+    // إعدادات PDF
     const opt = {
-      margin: [50, 10, 20, 10],
+      margin: [50,10,20,10], // أعلى, يمين, أسفل, يسار (مم)
       filename: 'توثيق-برنامج.pdf',
-      image: { type: 'jpeg', quality: 0.96 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: null },
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS:true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    const worker = html2pdf().set(opt).from(printable);
-    const pdf = await worker.toPdf().get('pdf');
-
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const bg = new Image();
-    bg.src = 'images/background.png';
-    bg.onload = function(){
-      pdf.addImage(bg, 'PNG', 0, 0, pageWidth, pageHeight);
-      pdf.setPage(1);
-      pdf.save('توثيق-برنامج.pdf');
-    };
+    html2pdf().set(opt).from(element).save();
   });
 </script>
 </body>
