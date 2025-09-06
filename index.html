@@ -230,40 +230,6 @@ function storeImages(event){
   }
 }
 
-function updatePreview(tabId){
-  const tabContent = document.getElementById(tabId);
-  const previewDiv = tabContent.querySelector('.preview');
-  if(!previewDiv) return;
-  previewDiv.innerHTML = '';
-  (uploadedImages[tabId] || []).forEach((src,index)=>{
-    const imgWrapper = document.createElement('div');
-    imgWrapper.style.position = 'relative';
-    imgWrapper.style.display = 'inline-block';
-    imgWrapper.style.margin = '2px';
-    
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.width='80px';
-    img.style.height='70px';
-    img.style.objectFit='cover';
-    imgWrapper.appendChild(img);
-    
-    const delBtn = document.createElement('div');
-    delBtn.textContent = '×';
-    delBtn.className = 'del-btn';
-    delBtn.title = 'حذف الصورة';
-    delBtn.addEventListener('click',()=>{ uploadedImages[tabId].splice(index,1); updatePreview(tabId); });
-    imgWrapper.appendChild(delBtn);
-    previewDiv.appendChild(imgWrapper);
-  });
-}
-
-setTimeout(()=>{
-  document.querySelectorAll('.date').forEach(el=>{
-    flatpickr(el,{ locale:'ar', dateFormat:"Y-m-d", altInput:true, altFormat:"Y-m-d" });
-  });
-},500);
-
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
