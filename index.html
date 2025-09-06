@@ -264,26 +264,13 @@ function printPDF(btn){
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
+  // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إضافة wrapper مع الخلفية والهامش
-  const wrapper = document.createElement('div');
-  wrapper.style.width = "100%";
-  wrapper.style.minHeight = "296.5mm"; // ارتفاع صفحة A4
-  wrapper.style.backgroundImage = "url('images/background.png')";
-  wrapper.style.backgroundSize = "cover";
-  wrapper.style.backgroundPosition = "center";
-  wrapper.style.backgroundRepeat = "no-repeat";
-  wrapper.style.paddingTop = "23mm";
-  wrapper.style.paddingBottom = "15mm";
-  wrapper.style.paddingLeft = "10mm";
-  wrapper.style.paddingRight = "10mm";
-
-  // إضافة الصور قبل الصف الأخير (المعلمات)
+  // إضافة الصور قبل الصف الأخير
   const tabImages = uploadedImages[tabId] || [];
-  let imagesWrapper;
   if(tabImages.length > 0){
-    imagesWrapper = document.createElement('div');
+    const imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
@@ -302,6 +289,17 @@ function printPDF(btn){
     else content.appendChild(imagesWrapper);
   }
 
+  // إنشاء wrapper مع الخلفية والهامش
+  const wrapper = document.createElement('div');
+  wrapper.style.width = "100%";
+  wrapper.style.backgroundImage = "url('images/background.png')";
+  wrapper.style.backgroundSize = "cover";
+  wrapper.style.backgroundPosition = "center";
+  wrapper.style.backgroundRepeat = "no-repeat";
+  wrapper.style.paddingTop = "23mm";
+  wrapper.style.paddingBottom = "15mm";
+  wrapper.style.paddingLeft = "10mm";
+  wrapper.style.paddingRight = "10mm";
   wrapper.appendChild(content);
 
   html2pdf()
