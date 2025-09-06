@@ -17,78 +17,76 @@
 }
 
 * { box-sizing: border-box; margin:0; padding:0; }
-body {
+body, input, label, button, header, footer {
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
+  margin:0;
+  padding:0;
   background:#f9f9f9;
-  width:100%;
-  line-height:1.4;
-  overflow-x:auto; /* شريط تمرير أفقي عند الحاجة */
 }
+body { width:100%; line-height:1.4; overflow-x:auto; }
 
 header {
   background:#15445a;
   color:white;
   text-align:center;
-  padding:1rem;
+  padding:12px;
 }
-header h1 { font-size:1.2rem; }
+header h1 { font-size:18px; }
 
 .tab-content {
-  padding:1rem;
+  padding:15px;
   width:100%;
-  min-width:320px; /* يمنع الصفوف من الانكسار على الجوال */
+  min-width:320px; /* ديناميكي على الجوال */
 }
 
 label {
   display:block;
-  margin:0.3rem 0 0.2rem;
+  margin:5px 0 2px;
   font-weight:bold;
-  font-size:0.9rem;
+  font-size:14px;
   text-align:center;
 }
 
 input {
   width:100%;
-  padding:0.5rem;
+  padding:6px;
   border:1px solid #c2c1c1;
   border-radius:6px;
-  margin-bottom:0.5rem;
-  font-size:0.9rem;
+  margin-bottom:5px;
+  font-size:14px;
   text-align:center;
   background:transparent;
+  font-family: 'HelveticaNeueW23', Arial, sans-serif;
 }
 
 button {
   background:#b36b3f;
   color:white;
   border:none;
-  padding:0.6rem;
-  margin:0.5rem 0;
+  padding:8px;
+  margin:5px 0;
   cursor:pointer;
   border-radius:6px;
   width:100%;
-  font-size:1rem;
+  font-size:14px;
   font-weight:bold;
 }
 
 footer {
   text-align:center;
-  padding:0.5rem;
+  padding:10px;
   color:#333;
   font-weight:bold;
-  font-size:0.8rem;
+  font-size:12px;
   background:#f1f1f1;
 }
 
-/* شبكات ثابتة للحفاظ على ترتيب الأعمدة */
-.grid-1 { display:grid; grid-template-columns:1fr; gap:0.5rem; }
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
-.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
+.grid-1 { display:grid; grid-template-columns:1fr; gap:5px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; }
 
-/* الصور المرفوعة */
-.preview { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-top:0.5rem; }
+.preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; }
 
-/* زر حذف الصور */
 .del-btn {
   position:absolute;
   top:5px;
@@ -109,12 +107,11 @@ footer {
   box-shadow:0 0 4px rgba(0,0,0,0.3);
 }
 
-/* الطباعة */
 @media print {
   @page { size:A4 portrait; margin:0; }
   body, .tab-content, div { background:transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   button,input[type="file"],.counter,.preview { display:none !important; }
-  label,input[type="text"] { font-size:0.9rem !important; background:transparent !important; text-align:center; color:black !important; }
+  label,input[type="text"] { font-size:14px !important; background:transparent !important; text-align:center; color:black !important; font-family: 'HelveticaNeueW23', Arial, sans-serif; }
 }
 </style>
 </head>
@@ -125,9 +122,8 @@ footer {
 </header>
 
 <div id="culture" class="tab-content active">
-  <label style="font-size:1rem; font-weight:bold;">استمارة توثيق برنامج</label>
+  <label style="font-size:16px;">استمارة توثيق برنامج</label>
 
-  <!-- إدارة التعليم واسم المدرسة -->
   <div class="grid-2">
     <div>
       <label>إدارة التعليم</label>
@@ -153,7 +149,7 @@ footer {
   <div class="grid-3">
     <div><label>مدة التنفيذ</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
-    <div><label>تاريخ التنفيذ</label><input type="text" class="date" style="text-align:center;">
+    <div><label>تاريخ التنفيذ</label><input type="text" class="date"></div>
   </div>
 
   <label>الوصف</label>
@@ -183,7 +179,7 @@ footer {
   <div class="counter"></div>
   <div class="preview"></div>
 
-  <div class="grid-3" style="margin-top:0.5rem;">
+  <div class="grid-3" style="margin-top:5px;">
     <div><label>معلمة المجال</label><input type="text"></div>
     <div><label>رائدة النشاط</label><input type="text" placeholder="وضحى النفيعي"></div>
     <div><label>مديرة المدرسة</label><input type="text" placeholder="نوير العنزي"></div>
@@ -191,6 +187,7 @@ footer {
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
+
 
 <script>
 let uploadedImages = {};
@@ -267,38 +264,17 @@ function printPDF(btn){
     tabImages.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.style.width = '150px';
-      img.style.height = '130px';
-      img.style.objectFit = 'cover';
+      img.style.width='150px';
+      img.style.height='130px';
+      img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
     });
-
-    const activityDiv = Array.from(content.querySelectorAll('div'))
-      .find(div => div.innerHTML.includes('رائدة النشاط'));
-    if(activityDiv) content.insertBefore(imagesWrapper, activityDiv);
-    else content.appendChild(imagesWrapper);
+    content.appendChild(imagesWrapper);
   }
 
-  const wrapper = document.createElement('div');
-  wrapper.style.position='relative';
-  wrapper.style.width='210mm';
-  wrapper.style.height='296.5mm';
-  wrapper.style.padding='22mm 10mm 15mm 10mm';
-  wrapper.style.boxSizing='border-box';
-  wrapper.style.backgroundImage = "url('images/background.png')";
-  wrapper.style.backgroundSize = "cover";
-  wrapper.style.backgroundPosition = "center";
-  wrapper.style.backgroundRepeat = "no-repeat";
-  wrapper.appendChild(content);
-
-  html2pdf().set({
-    margin:0,
-    filename: tabId+'-report.pdf',
-    image:{type:'jpeg',quality:1},
-    html2canvas:{scale:3, useCORS:true, backgroundColor:null},
-    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-  }).from(wrapper).save();
+  html2pdf().set({ filename: 'report.pdf', pagebreak: { mode: ['avoid-all'] }, html2canvas: { scale:2 } }).from(content).save();
 }
 </script>
+
 </body>
 </html>
