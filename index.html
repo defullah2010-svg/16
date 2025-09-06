@@ -267,7 +267,7 @@ function printPDF(btn){
   // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إنشاء wrapper للعناصر مع الهامش
+  // wrapper مع الهوامش
   const wrapper = document.createElement('div');
   wrapper.style.marginTop = '23mm';
   wrapper.style.marginBottom = '15mm';
@@ -275,7 +275,7 @@ function printPDF(btn){
   wrapper.style.marginRight = '10mm';
   wrapper.appendChild(content);
 
-  // إنشاء background يغطي كامل صفحة A4
+  // background يغطي كامل A4
   const backgroundWrapper = document.createElement('div');
   backgroundWrapper.style.position = 'absolute';
   backgroundWrapper.style.top = '0';
@@ -297,7 +297,7 @@ function printPDF(btn){
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
     imagesWrapper.style.margin = '10px 0';
-    
+
     tabImages.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
@@ -307,23 +307,15 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // وضع الصور قبل صف المعلمات
-    const lastRow = content.querySelectorAll('.grid-3');
-    if(lastRow.length > 0){
-      const staffRow = lastRow[lastRow.length - 1]; 
-      staffRow.style.marginTop = '10px';
-      imagesWrapper.after(staffRow);
-      wrapper.insertBefore(imagesWrapper, staffRow);
-    } else {
-      wrapper.appendChild(imagesWrapper);
-    }
+    // ضع الصور بعد الهامش مباشرة داخل wrapper
+    wrapper.insertBefore(imagesWrapper, wrapper.firstChild.nextSibling); 
   }
 
   html2pdf()
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:2, backgroundColor: null, logging:true, width: 210*3.78, height: 297*3.78 }
+      html2canvas: { scale:2, backgroundColor: null }
     })
     .from(backgroundWrapper)
     .save();
