@@ -11,18 +11,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
-@font-face {
-  font-family: 'HelveticaNeueW23';
-  src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
-}
-
 * { box-sizing: border-box; margin:0; padding:0; }
-body, input, label, button, header, footer {
-  font-family: 'HelveticaNeueW23', Arial, sans-serif;
+body {
+  font-family: Arial, sans-serif;
   background:#f9f9f9;
+  line-height:1.4;
 }
-body { width:100%; line-height:1.4; overflow-x:auto; }
-
 header {
   background:#15445a;
   color:white;
@@ -44,7 +38,6 @@ label {
   font-size:14px;
   text-align:center;
 }
-
 input {
   width:100%;
   padding:6px;
@@ -55,69 +48,61 @@ input {
   text-align:center;
   background:transparent;
 }
-
 button {
   background:#b36b3f;
   color:white;
   border:none;
   padding:8px;
-  margin:5px 0;
+  margin:10px 0;
   cursor:pointer;
   border-radius:6px;
   width:100%;
   font-size:14px;
   font-weight:bold;
 }
-
-footer {
-  text-align:center;
-  padding:10px;
-  color:#333;
-  font-weight:bold;
-  font-size:12px;
-  background:#f1f1f1;
-}
-
 .grid-1 { display:grid; grid-template-columns:1fr; gap:5px; }
 .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
 .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; }
 
-.preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; }
-
-/* الصور في الصفحة */
+.preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; position:relative; }
+.preview div { position:relative; }
 .preview img {
-  width: 80px;
-  height: 70px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width:80px;
+  height:70px;
+  object-fit:cover;
+  border:1px solid #ccc;
+  border-radius:4px;
 }
-
 .del-btn {
   position:absolute;
-  top:5px;
-  left:50%;
-  transform:translateX(-50%);
-  width:24px;
-  height:24px;
+  top:2px;
+  left:2px;
+  width:20px;
+  height:20px;
   background:#d50000;
   color:#fff;
-  border:2px solid #fff;
+  border:none;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
-  font-size:16px;
+  font-size:14px;
   cursor:pointer;
-  box-shadow:0 0 4px rgba(0,0,0,0.3);
+}
+.print-info {
+  font-weight:bold;
+  text-align:center;
+  margin-top:10px;
 }
 
-/* الطباعة */
+/* عند الطباعة */
 @media print {
-  button, input[type="file"], .del-btn, .counter { display: none !important; }
-  .preview img { width: 150px !important; height: 130px !important; }
-  .print-info { font-weight: bold; text-align: center; margin-top: 10px; }
+  button, input[type="file"], .del-btn, .counter { display:none !important; }
+  .preview img {
+    width:150px !important;
+    height:130px !important;
+  }
 }
 </style>
 </head>
@@ -153,7 +138,9 @@ footer {
   </div>
 
   <label>الوصف</label>
-  <div class="grid-1"><input type="text"><input type="text"></div>
+  <div class="grid-1">
+    <input type="text"><input type="text">
+  </div>
 
   <div class="grid-2">
     <div><label>الفئة المستهدفة</label><input type="text"></div>
@@ -161,7 +148,9 @@ footer {
   </div>
 
   <label>القيمة</label>
-  <div class="grid-1"><input type="text"><input type="text"></div>
+  <div class="grid-1">
+    <input type="text"><input type="text">
+  </div>
 
   <label>مؤشر الإنجاز</label>
   <div class="grid-1"><input type="text"></div>
@@ -169,27 +158,27 @@ footer {
   <label>التحديات والصعوبات</label>
   <div class="grid-3"><input type="text"><input type="text"><input type="text"></div>
 
+  <!-- رفع الصور -->
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter"></div>
   <div class="preview"></div>
 
+  <!-- أسماء المعلمات -->
   <div class="grid-3" style="margin-top:5px;">
-    <div><label>معلمة المجال</label><input type="text" placeholder="اسم المعلمة"></div>
-    <div><label>رائدة النشاط</label><input type="text" placeholder="وضحى النفيعي"></div>
-    <div><label>مديرة المدرسة</label><input type="text" placeholder="نوير العنزي"></div>
+    <div><label>معلمة المجال</label><input id="domainTeacher" type="text"></div>
+    <div><label>رائدة النشاط</label><input id="activityLeader" type="text" placeholder="وضحى النفيعي"></div>
+    <div><label>مديرة المدرسة</label><input id="schoolPrincipal" type="text" placeholder="نوير العنزي"></div>
   </div>
 
-  <button onclick="printPDF(this)">طباعة التقرير</button>
+  <button onclick="printPDF()">طباعة التقرير</button>
 </div>
 
 <script>
-let uploadedImages = {};
+let uploadedImages = [];
 
 function storeImages(event){
-  const tabId = event.target.closest('.tab-content').id;
   const files = event.target.files;
-  if(!uploadedImages[tabId]) uploadedImages[tabId] = [];
-  if(uploadedImages[tabId].length + files.length > 10){
+  if(uploadedImages.length + files.length > 10){
     alert("مسموح برفع 10 صور فقط لكل تقرير.");
     event.target.value = "";
     return;
@@ -197,84 +186,69 @@ function storeImages(event){
   for(let i=0;i<files.length;i++){
     const reader = new FileReader();
     reader.onload = function(e){ 
-      uploadedImages[tabId].push(e.target.result); 
-      updatePreview(tabId);
+      uploadedImages.push(e.target.result); 
+      updatePreview();
     }
     reader.readAsDataURL(files[i]);
   }
 }
-
-function updatePreview(tabId){
-  const container = document.querySelector("#" + tabId + " .preview");
-  container.innerHTML = "";
-  uploadedImages[tabId].forEach(src=>{
+function updatePreview(){
+  const preview = document.querySelector(".preview");
+  preview.innerHTML = "";
+  uploadedImages.forEach((src,idx)=>{
     const div = document.createElement("div");
-    div.style.position = "relative";
-    div.innerHTML = `<img src="${src}"><span class="del-btn" onclick="this.parentElement.remove()">×</span>`;
-    container.appendChild(div);
+    const img = document.createElement("img");
+    img.src = src;
+    const del = document.createElement("button");
+    del.textContent="×";
+    del.className="del-btn";
+    del.onclick=()=>{ uploadedImages.splice(idx,1); updatePreview(); };
+    div.appendChild(img);
+    div.appendChild(del);
+    preview.appendChild(div);
   });
 }
+function printPDF(){
+  // قراءة أسماء
+  const domainTeacher = document.getElementById("domainTeacher").value || "____";
+  const activityLeader = document.getElementById("activityLeader").value || document.getElementById("activityLeader").placeholder;
+  const schoolPrincipal = document.getElementById("schoolPrincipal").value || document.getElementById("schoolPrincipal").placeholder;
 
-function printPDF(btn){
-  const tabContent = btn.closest('.tab-content');
-  const tabId = tabContent.id;
-  const content = tabContent.cloneNode(true);
+  // الصور في صف واحد
+  const imagesWrapper = document.createElement("div");
+  imagesWrapper.style.display="flex";
+  imagesWrapper.style.flexWrap="nowrap";
+  imagesWrapper.style.justifyContent="center";
+  imagesWrapper.style.gap="15px";
+  imagesWrapper.style.margin="15px 0";
 
-  // حذف الزرار والمدخلات غير اللازمة
-  content.querySelectorAll('button,input[type="file"],.del-btn,.counter').forEach(el=>el.remove());
+  uploadedImages.forEach(src=>{
+    const img=document.createElement("img");
+    img.src=src;
+    img.style.width="150px";
+    img.style.height="130px";
+    img.style.objectFit="cover";
+    imagesWrapper.appendChild(img);
+  });
 
-  // جلب القيم
-  const domainTeacherInput = tabContent.querySelector('label:contains("معلمة المجال")')?.nextElementSibling;
-  const domainTeacher = domainTeacherInput?.value.trim() || domainTeacherInput?.placeholder || "";
+  // نسخة للطباعة
+  const content=document.querySelector(".tab-content").cloneNode(true);
+  content.querySelectorAll('button,input[type="file"],.del-btn,.counter,.preview').forEach(el=>el.remove());
+  const lastRow=content.querySelector('.grid-3:last-of-type');
+  if(lastRow) lastRow.after(imagesWrapper);
+  else content.appendChild(imagesWrapper);
 
-  const activityLeaderInput = tabContent.querySelector('label:contains("رائدة النشاط")')?.nextElementSibling;
-  const activityLeader = activityLeaderInput?.value.trim() || activityLeaderInput?.placeholder || "";
+  const infoRow=document.createElement("div");
+  infoRow.className="print-info";
+  infoRow.textContent=`معلمة المجال: ${domainTeacher}   رائدة النشاط: ${activityLeader}   مديرة المدرسة: ${schoolPrincipal}`;
+  imagesWrapper.after(infoRow);
 
-  const schoolPrincipalInput = tabContent.querySelector('label:contains("مديرة المدرسة")')?.nextElementSibling;
-  const schoolPrincipal = schoolPrincipalInput?.value.trim() || schoolPrincipalInput?.placeholder || "";
-
-  // الصور صف واحد
-  const tabImages = uploadedImages[tabId] || [];
-  if(tabImages.length > 0){
-    const imagesWrapper = document.createElement('div');
-    imagesWrapper.style.display = 'flex';
-    imagesWrapper.style.justifyContent = 'center';
-    imagesWrapper.style.gap = '20px';
-    imagesWrapper.style.margin = '15px 0';
-
-    tabImages.forEach(src=>{
-      const img = document.createElement('img');
-      img.src = src;
-      img.style.width='150px';
-      img.style.height='130px';
-      img.style.objectFit='cover';
-      imagesWrapper.appendChild(img);
-    });
-
-    content.appendChild(imagesWrapper);
-
-    // أسماء المعلمات تحت الصور
-    const infoRow = document.createElement('div');
-    infoRow.className = 'print-info';
-    infoRow.innerHTML = `معلمة المجال: ${domainTeacher} &nbsp;&nbsp; رائدة النشاط: ${activityLeader} &nbsp;&nbsp; مديرة المدرسة: ${schoolPrincipal}`;
-    content.appendChild(infoRow);
-  }
-
-  // A4 بخلفية
-  const wrapper = document.createElement('div');
-  wrapper.style.width = '210mm';
-  wrapper.style.height = '296mm';
-  wrapper.style.backgroundImage = "url('images/background.png')";
-  wrapper.style.backgroundSize = '100% 100%';
-  wrapper.style.padding = '20mm';
-  wrapper.appendChild(content);
-
-  html2pdf()
-    .set({ filename: 'report.pdf', pagebreak: { mode: ['avoid-all'] }, html2canvas: { scale: 4, backgroundColor: null } })
-    .from(wrapper)
-    .save();
+  // نافذة الطباعة
+  const printWindow=window.open("", "_blank");
+  printWindow.document.write("<html><head><title>تقرير</title></head><body>"+content.innerHTML+"</body></html>");
+  printWindow.document.close();
+  printWindow.print();
 }
 </script>
-
 </body>
 </html>
