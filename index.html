@@ -36,7 +36,7 @@ header h1 { font-size:18px; }
 .tab-content {
   padding:15px;
   width:100%;
-  min-width:320px; /* ديناميكي على الجوال */
+  min-width:320px;
 }
 
 label {
@@ -110,10 +110,7 @@ footer {
 @media print {
   @page { 
     size: A4 portrait; 
-    margin-top: 23mm;   /* الهامش العلوي */
-    margin-bottom: 0mm; /* الهامش السفلي */
-    margin-left: 10mm;   /* الهامش الأيسر */
-    margin-right: 10mm;  /* الهامش الأيمن */
+    margin:23mm 10mm 15mm 10mm; /* أعلى، يمين، أسفل، يسار */
   }
   body, .tab-content, div { 
     background:transparent !important; 
@@ -206,7 +203,6 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-
 <script>
 let uploadedImages = {};
 
@@ -271,7 +267,7 @@ function printPDF(btn){
   // إزالة العناصر غير المرغوب فيها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إنشاء عنصر wrapper لتطبيق الهامش على المحتوى فقط
+  // إنشاء wrapper للعناصر مع الهامش
   const wrapper = document.createElement('div');
   wrapper.style.marginTop = '23mm';
   wrapper.style.marginBottom = '15mm';
@@ -279,13 +275,13 @@ function printPDF(btn){
   wrapper.style.marginRight = '10mm';
   wrapper.appendChild(content);
 
-  // إضافة الخلفية على body كامل في PDF
+  // إنشاء background يغطي كامل صفحة A4
   const backgroundWrapper = document.createElement('div');
   backgroundWrapper.style.position = 'absolute';
   backgroundWrapper.style.top = '0';
   backgroundWrapper.style.left = '0';
-  backgroundWrapper.style.width = '210mm';   // عرض A4
-  backgroundWrapper.style.height = '297mm';  // ارتفاع A4
+  backgroundWrapper.style.width = '210mm';
+  backgroundWrapper.style.height = '297mm';
   backgroundWrapper.style.backgroundImage = "url('images/background.png')";
   backgroundWrapper.style.backgroundSize = 'cover';
   backgroundWrapper.style.backgroundPosition = 'center';
@@ -311,7 +307,7 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // ضع الصور قبل صف المعلمات
+    // وضع الصور قبل صف المعلمات
     const lastRow = content.querySelectorAll('.grid-3');
     if(lastRow.length > 0){
       const staffRow = lastRow[lastRow.length - 1]; 
@@ -327,7 +323,7 @@ function printPDF(btn){
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:2, backgroundColor: null, logging:true, width: 210*3.78, height: 297*3.78 } // full A4 size in px
+      html2canvas: { scale:2, backgroundColor: null, logging:true, width: 210*3.78, height: 297*3.78 }
     })
     .from(backgroundWrapper)
     .save();
