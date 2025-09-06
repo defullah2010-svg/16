@@ -280,7 +280,7 @@ function printPDF(btn){
       const img = document.createElement('img');
       img.src = src;
       img.style.width='150px';
-      img.style.height='130px';
+      img.style.height='120px';
       img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
     });
@@ -307,7 +307,7 @@ function printPDF(btn){
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale:2, backgroundColor: null }
+      html2canvas: { scale:8, backgroundColor: null }
     })
     .from(wrapper)
     .save();
