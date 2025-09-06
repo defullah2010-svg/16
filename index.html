@@ -322,7 +322,7 @@ function printPDF(btn){
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale: 8, backgroundColor: null }
+      html2canvas: { scale: 4, backgroundColor: null }
     })
     .from(wrapper)
     .save();
