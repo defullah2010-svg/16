@@ -56,7 +56,6 @@ input {
   font-size:14px;
   text-align:center;
   background:transparent;
-  font-family: 'HelveticaNeueW23', Arial, sans-serif;
 }
 
 button {
@@ -87,7 +86,6 @@ footer {
 
 .preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; }
 
-/* حجم الصور في الصفحة (صغير لتناسب الجوال) */
 .preview img {
   width: 80px;
   height: 70px;
@@ -116,15 +114,14 @@ footer {
   box-shadow:0 0 4px rgba(0,0,0,0.3);
 }
 
-/* عند الطباعة */
 @media print {
   button, input[type="file"], .del-btn, .counter { 
     display: none !important; 
   }
 
   .preview img {
-    width: 180px !important; /* زيادة حجم الصور عند الطباعة */
-    height: 160px !important; /* زيادة حجم الصور عند الطباعة */
+    width: 180px !important;
+    height: 160px !important;
   }
 
   .print-info {
