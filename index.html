@@ -149,7 +149,7 @@ footer {
   <div class="grid-3">
     <div><label>مدة التنفيذ</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
-    <div><label>تاريخ التنفيذ</label><input type="text" class="date"></div>
+    <div><label>تاريخ التنفيذ</label><input type="text" class="date" style="text-align:center;">
   </div>
 
   <label>الوصف</label>
@@ -241,7 +241,7 @@ function updatePreview(tabId){
 
 setTimeout(()=>{
   document.querySelectorAll('.date').forEach(el=>{
-    flatpickr(el,{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
+    flatpickr(el,{ locale:'ar', dateFormat:"Y-m-d", altInput:true, altFormat:"Y-m-d" });
   });
 },500);
 
