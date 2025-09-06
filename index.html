@@ -268,14 +268,16 @@ function printPDF(btn){
 
   // إضافة wrapper مع الخلفية والهامش
   const wrapper = document.createElement('div');
-  wrapper.style.backgroundImage = "url('images/background.png')";
-  wrapper.style.backgroundSize = "cover";
-  wrapper.style.backgroundPosition = "center";
-  wrapper.style.backgroundRepeat = "no-repeat";
-  wrapper.style.paddingTop = "23mm";
-  wrapper.style.paddingBottom = "15mm";
-  wrapper.style.paddingLeft = "10mm";
-  wrapper.style.paddingRight = "10mm";
+wrapper.style.width = "210mm";    // عرض صفحة A4
+wrapper.style.height = "297mm";   // ارتفاع صفحة A4
+wrapper.style.backgroundImage = "url('images/background.png')";
+wrapper.style.backgroundSize = "cover";   // تغطي كامل الصفحة
+wrapper.style.backgroundPosition = "center";
+wrapper.style.backgroundRepeat = "no-repeat";
+wrapper.style.paddingTop = "23mm";
+wrapper.style.paddingBottom = "15mm";
+wrapper.style.paddingLeft = "10mm";
+wrapper.style.paddingRight = "10mm";
 
   // إضافة الصور قبل الصف الأخير (المعلمات)
   const tabImages = uploadedImages[tabId] || [];
