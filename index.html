@@ -87,6 +87,15 @@ footer {
 
 .preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; }
 
+/* حجم الصور في الصفحة (صغير لتناسب الجوال) */
+.preview img {
+  width: 80px;
+  height: 70px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .del-btn {
   position:absolute;
   top:5px;
@@ -107,13 +116,14 @@ footer {
   box-shadow:0 0 4px rgba(0,0,0,0.3);
 }
 
+/* عند الطباعة: إخفاء الأزرار وحقول الرفع لكن إبقاء الصور */
 @media print {
+  button, input[type="file"], .counter { 
+    display:none !important; 
+  }
   @page { 
     size: A4 portrait; 
     margin:23mm 10mm 15mm 10mm; 
-  }
-  button, input[type="file"], .counter, .preview { 
-    display:none !important; 
   }
 }
 </style>
@@ -226,8 +236,8 @@ function updatePreview(tabId){
     
     const img = document.createElement('img');
     img.src = src;
-    img.style.width='50mm'; // عرض الصورة على الورق
-    img.style.height='45mm'; // ارتفاع الصورة على الورق
+    img.style.width='80px';  // صغير للعرض على الصفحة
+    img.style.height='70px';
     img.style.objectFit='cover';
     imgWrapper.appendChild(img);
     
@@ -253,7 +263,7 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
 
   // إزالة العناصر غير المرغوب فيها
-  content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
+  content.querySelectorAll('button,input[type="file"],.counter').forEach(el=>el.remove());
 
   // إضافة الصور قبل الصف الأخير
   const tabImages = uploadedImages[tabId] || [];
@@ -267,7 +277,7 @@ function printPDF(btn){
     tabImages.forEach(src=>{
       const img = document.createElement('img');
       img.src = src;
-      img.style.width='50mm'; 
+      img.style.width='50mm';  // كبير للطباعة
       img.style.height='45mm';
       img.style.objectFit='cover';
       imagesWrapper.appendChild(img);
@@ -295,7 +305,7 @@ function printPDF(btn){
     .set({
       filename: 'report.pdf',
       pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale: 8, backgroundColor: null } // أعلى دقة ممكنة
+      html2canvas: { scale: 8, backgroundColor: null }
     })
     .from(wrapper)
     .save();
