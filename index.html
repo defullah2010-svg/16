@@ -116,14 +116,21 @@ footer {
   box-shadow:0 0 4px rgba(0,0,0,0.3);
 }
 
-/* عند الطباعة: إخفاء الأزرار وحقول الرفع لكن إبقاء الصور */
+/* عند الطباعة */
 @media print {
-  button, input[type="file"], .counter { 
-    display:none !important; 
+  button, input[type="file"], .del-btn, .counter { 
+    display: none !important; 
   }
-  @page { 
-    size: A4 portrait; 
-    margin:23mm 10mm 15mm 10mm; 
+
+  .preview img {
+    width: 150px !important;
+    height: 130px !important;
+  }
+
+  .print-info {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
   }
 }
 </style>
@@ -208,8 +215,8 @@ function storeImages(event){
   const tabId = event.target.closest('.tab-content').id;
   const files = event.target.files;
   if(!uploadedImages[tabId]) uploadedImages[tabId] = [];
-  if(uploadedImages[tabId].length + files.length > 4){
-    alert("مسموح برفع 4 صور فقط لكل تقرير.");
+  if(uploadedImages[tabId].length + files.length > 10){
+    alert("مسموح برفع 10 صور فقط لكل تقرير.");
     event.target.value = "";
     return;
   }
@@ -236,7 +243,7 @@ function updatePreview(tabId){
     
     const img = document.createElement('img');
     img.src = src;
-    img.style.width='80px';  // صغير للعرض على الصفحة
+    img.style.width='80px';
     img.style.height='70px';
     img.style.objectFit='cover';
     imgWrapper.appendChild(img);
@@ -263,48 +270,41 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
 
   // إزالة العناصر غير المرغوب فيها من الطباعة
-  content.querySelectorAll('button,input[type="file"],.counter').forEach(el=>el.remove());
+  content.querySelectorAll('button,input[type="file"],.del-btn,.counter').forEach(el=>el.remove());
 
   // أخذ قيم أسماء المعلمات من النسخة الأصلية
   const domainTeacher = tabContent.querySelector('input:nth-of-type(10)')?.value || '';
   const activityLeader = tabContent.querySelector('input[placeholder="وضحى النفيعي"]')?.value || 'وضحى النفيعي';
   const schoolPrincipal = tabContent.querySelector('input[placeholder="نوير العنزي"]')?.value || 'نوير العنزي';
 
-  // إضافة الصور قبل الصف الأخير
+  // إضافة الصور في صف واحد
   const tabImages = uploadedImages[tabId] || [];
   if(tabImages.length > 0){
     const imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
-    imagesWrapper.style.flexWrap = 'wrap';
+    imagesWrapper.style.flexWrap = 'nowrap';
     imagesWrapper.style.justifyContent = 'center';
-    imagesWrapper.style.gap = '10px';
-    imagesWrapper.style.margin = '10px 0';
+    imagesWrapper.style.gap = '20px';
+    imagesWrapper.style.margin = '15px 0';
 
     tabImages.forEach(src=>{
-      const imgContainer = document.createElement('div');
-      imgContainer.style.textAlign = 'center';
-      
       const img = document.createElement('img');
       img.src = src;
       img.style.width='150px';
       img.style.height='130px';
       img.style.objectFit='cover';
-      imgContainer.appendChild(img);
-
-      // إضافة أسماء المعلمات تحت الصورة
-      const infoRow = document.createElement('div');
-      infoRow.style.marginTop = '5px';
-      infoRow.style.fontWeight = 'bold';
-      infoRow.style.textAlign = 'center';
-      infoRow.innerHTML = `معلمة المجال: ${domainTeacher}<br>رائدة النشاط: ${activityLeader}<br>مديرة المدرسة: ${schoolPrincipal}`;
-
-      imgContainer.appendChild(infoRow);
-      imagesWrapper.appendChild(imgContainer);
+      imagesWrapper.appendChild(img);
     });
 
     const lastRow = content.querySelector('.grid-3:last-of-type');
     if(lastRow) lastRow.before(imagesWrapper);
     else content.appendChild(imagesWrapper);
+
+    // أسماء المعلمات تحت الصور مرة واحدة
+    const infoRow = document.createElement('div');
+    infoRow.className = 'print-info';
+    infoRow.innerHTML = `معلمة المجال: ${domainTeacher} &nbsp;&nbsp; رائدة النشاط: ${activityLeader} &nbsp;&nbsp; مديرة المدرسة: ${schoolPrincipal}`;
+    imagesWrapper.after(infoRow);
   }
 
   // إنشاء wrapper يمثل صفحة A4 كاملة مع الخلفية
