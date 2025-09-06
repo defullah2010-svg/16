@@ -248,14 +248,22 @@ function printPDF(btn){
     else content.appendChild(imagesWrapper);
   }
 
+  // إضافة wrapper مع خلفية الصورة
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='35mm 10mm 20mm 10mm';
+  wrapper.style.padding='30mm 10mm 15mm 10mm';
   wrapper.style.boxSizing='border-box';
-  wrapper.style.overflow='hidden';
+  wrapper.style.backgroundImage = "url('/images/background.png')";
+  wrapper.style.backgroundSize = "cover";
+  wrapper.style.backgroundPosition = "center";
+  wrapper.style.backgroundRepeat = "no-repeat";
   wrapper.appendChild(content);
+
+  // ضغط المحتوى لتناسب صفحة واحدة
+  wrapper.style.transform = "scale(0.85)";
+  wrapper.style.transformOrigin = "top left";
 
   html2pdf().set({
     margin:0,
