@@ -252,6 +252,12 @@ function printPDF(btn){
 
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
+  // إضافة الخلفية هنا
+  content.style.backgroundImage = "url('images/background.png')";
+  content.style.backgroundSize = "cover";
+  content.style.backgroundPosition = "center";
+  content.style.backgroundRepeat = "no-repeat";
+
   const tabImages = uploadedImages[tabId] || [];
   if(tabImages.length > 0){
     const imagesWrapper = document.createElement('div');
@@ -272,7 +278,14 @@ function printPDF(btn){
     content.appendChild(imagesWrapper);
   }
 
-  html2pdf().set({ filename: 'report.pdf', pagebreak: { mode: ['avoid-all'] }, html2canvas: { scale:2 } }).from(content).save();
+  html2pdf()
+    .set({
+      filename: 'report.pdf',
+      pagebreak: { mode: ['avoid-all'] },
+      html2canvas: { scale:2, backgroundColor: null } // backgroundColor null لتظهر الصورة
+    })
+    .from(content)
+    .save();
 }
 </script>
 
