@@ -19,8 +19,6 @@
 * { box-sizing: border-box; margin:0; padding:0; }
 body, input, label, button, header, footer {
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
-  margin:0;
-  padding:0;
   background:#f9f9f9;
 }
 body { width:100%; line-height:1.4; overflow-x:auto; }
@@ -56,7 +54,6 @@ input {
   font-size:14px;
   text-align:center;
   background:transparent;
-  font-family: 'HelveticaNeueW23', Arial, sans-serif;
 }
 
 button {
@@ -87,7 +84,7 @@ footer {
 
 .preview { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:5px; }
 
-/* حجم الصور في الصفحة (صغير لتناسب الجوال) */
+/* الصور في الصفحة */
 .preview img {
   width: 80px;
   height: 70px;
@@ -116,22 +113,11 @@ footer {
   box-shadow:0 0 4px rgba(0,0,0,0.3);
 }
 
-/* عند الطباعة */
+/* الطباعة */
 @media print {
-  button, input[type="file"], .del-btn, .counter { 
-    display: none !important; 
-  }
-
-  .preview img {
-    width: 150px !important;
-    height: 130px !important;
-  }
-
-  .print-info {
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10px;
-  }
+  button, input[type="file"], .del-btn, .counter { display: none !important; }
+  .preview img { width: 150px !important; height: 130px !important; }
+  .print-info { font-weight: bold; text-align: center; margin-top: 10px; }
 }
 </style>
 </head>
@@ -145,14 +131,8 @@ footer {
   <label style="font-size:16px;">استمارة توثيق برنامج</label>
 
   <div class="grid-2">
-    <div>
-      <label>إدارة التعليم</label>
-      <input type="text" placeholder="الخرج">
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <input type="text" placeholder="المتوسطة السادسة عشر">
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" placeholder="الخرج"></div>
+    <div><label>اسم المدرسة</label><input type="text" placeholder="المتوسطة السادسة عشر"></div>
   </div>
 
   <div class="grid-2">
@@ -173,10 +153,7 @@ footer {
   </div>
 
   <label>الوصف</label>
-  <div class="grid-1">
-    <input type="text">
-    <input type="text">
-  </div>
+  <div class="grid-1"><input type="text"><input type="text"></div>
 
   <div class="grid-2">
     <div><label>الفئة المستهدفة</label><input type="text"></div>
@@ -184,10 +161,7 @@ footer {
   </div>
 
   <label>القيمة</label>
-  <div class="grid-1">
-    <input type="text">
-    <input type="text">
-  </div>
+  <div class="grid-1"><input type="text"><input type="text"></div>
 
   <label>مؤشر الإنجاز</label>
   <div class="grid-1"><input type="text"></div>
@@ -200,7 +174,7 @@ footer {
   <div class="preview"></div>
 
   <div class="grid-3" style="margin-top:5px;">
-    <div><label>معلمة المجال</label><input type="text"></div>
+    <div><label>معلمة المجال</label><input type="text" placeholder="اسم المعلمة"></div>
     <div><label>رائدة النشاط</label><input type="text" placeholder="وضحى النفيعي"></div>
     <div><label>مديرة المدرسة</label><input type="text" placeholder="نوير العنزي"></div>
   </div>
@@ -230,30 +204,40 @@ function storeImages(event){
   }
 }
 
+function updatePreview(tabId){
+  const container = document.querySelector("#" + tabId + " .preview");
+  container.innerHTML = "";
+  uploadedImages[tabId].forEach(src=>{
+    const div = document.createElement("div");
+    div.style.position = "relative";
+    div.innerHTML = `<img src="${src}"><span class="del-btn" onclick="this.parentElement.remove()">×</span>`;
+    container.appendChild(div);
+  });
+}
+
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
   const content = tabContent.cloneNode(true);
 
-  // إزالة العناصر غير المرغوب فيها
+  // حذف الزرار والمدخلات غير اللازمة
   content.querySelectorAll('button,input[type="file"],.del-btn,.counter').forEach(el=>el.remove());
 
-  // أخذ قيم أسماء المعلمات (إذا فارغ استخدم placeholder)
-  const domainTeacherInput = tabContent.querySelector('input:nth-of-type(10)');
-  const domainTeacher = domainTeacherInput.value.trim() || domainTeacherInput.placeholder || '';
+  // جلب القيم
+  const domainTeacherInput = tabContent.querySelector('label:contains("معلمة المجال")')?.nextElementSibling;
+  const domainTeacher = domainTeacherInput?.value.trim() || domainTeacherInput?.placeholder || "";
 
-  const activityLeaderInput = tabContent.querySelector('input[placeholder="وضحى النفيعي"]');
-  const activityLeader = activityLeaderInput.value.trim() || activityLeaderInput.placeholder || 'وضحى النفيعي';
+  const activityLeaderInput = tabContent.querySelector('label:contains("رائدة النشاط")')?.nextElementSibling;
+  const activityLeader = activityLeaderInput?.value.trim() || activityLeaderInput?.placeholder || "";
 
-  const schoolPrincipalInput = tabContent.querySelector('input[placeholder="نوير العنزي"]');
-  const schoolPrincipal = schoolPrincipalInput.value.trim() || schoolPrincipalInput.placeholder || 'نوير العنزي';
+  const schoolPrincipalInput = tabContent.querySelector('label:contains("مديرة المدرسة")')?.nextElementSibling;
+  const schoolPrincipal = schoolPrincipalInput?.value.trim() || schoolPrincipalInput?.placeholder || "";
 
-  // إضافة الصور في صف واحد
+  // الصور صف واحد
   const tabImages = uploadedImages[tabId] || [];
   if(tabImages.length > 0){
     const imagesWrapper = document.createElement('div');
     imagesWrapper.style.display = 'flex';
-    imagesWrapper.style.flexWrap = 'nowrap';
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '20px';
     imagesWrapper.style.margin = '15px 0';
@@ -267,37 +251,26 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    const lastRow = content.querySelector('.grid-3:last-of-type');
-    if(lastRow) lastRow.before(imagesWrapper);
-    else content.appendChild(imagesWrapper);
+    content.appendChild(imagesWrapper);
 
-    // إضافة أسماء المعلمات مرة واحدة تحت الصور
+    // أسماء المعلمات تحت الصور
     const infoRow = document.createElement('div');
     infoRow.className = 'print-info';
     infoRow.innerHTML = `معلمة المجال: ${domainTeacher} &nbsp;&nbsp; رائدة النشاط: ${activityLeader} &nbsp;&nbsp; مديرة المدرسة: ${schoolPrincipal}`;
-    imagesWrapper.after(infoRow);
+    content.appendChild(infoRow);
   }
 
-  // إعداد صفحة A4
+  // A4 بخلفية
   const wrapper = document.createElement('div');
   wrapper.style.width = '210mm';
   wrapper.style.height = '296mm';
   wrapper.style.backgroundImage = "url('images/background.png')";
   wrapper.style.backgroundSize = '100% 100%';
-  wrapper.style.backgroundPosition = 'center';
-  wrapper.style.backgroundRepeat = 'no-repeat';
-  wrapper.style.paddingTop = '23mm';
-  wrapper.style.paddingBottom = '15mm';
-  wrapper.style.paddingLeft = '10mm';
-  wrapper.style.paddingRight = '10mm';
+  wrapper.style.padding = '20mm';
   wrapper.appendChild(content);
 
   html2pdf()
-    .set({
-      filename: 'report.pdf',
-      pagebreak: { mode: ['avoid-all'] },
-      html2canvas: { scale: 8, backgroundColor: null }
-    })
+    .set({ filename: 'report.pdf', pagebreak: { mode: ['avoid-all'] }, html2canvas: { scale: 4, backgroundColor: null } })
     .from(wrapper)
     .save();
 }
